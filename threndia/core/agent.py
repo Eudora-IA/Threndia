@@ -133,15 +133,15 @@ class Agent:
         
         # Update metric weights based on learning
         if actual_outcomes:
+            # Create a lookup dictionary for better performance
+            metric_values = {r.metric_name: r.value for r in metric_results}
+            
             for metric_name, actual_value in actual_outcomes.items():
                 if metric_name not in self.knowledge_base["metric_weights"]:
                     self.knowledge_base["metric_weights"][metric_name] = 1.0
                 
                 # Adjust weight based on prediction accuracy
-                predicted = next(
-                    (r.value for r in metric_results if r.metric_name == metric_name),
-                    None
-                )
+                predicted = metric_values.get(metric_name)
                 if predicted is not None:
                     error = abs(predicted - actual_value)
                     accuracy = 1.0 / (1.0 + error)

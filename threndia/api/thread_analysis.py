@@ -24,6 +24,9 @@ class ThreadAnalysisAPI:
     multiple metrics with self-learning capabilities.
     """
     
+    # Confidence calculation constant
+    MIN_DATA_POINTS_FOR_FULL_CONFIDENCE = 20.0
+    
     def __init__(self, max_concurrent_threads: int = 10):
         """
         Initialize the Thread Analysis API
@@ -317,7 +320,9 @@ class ThreadAnalysisAPI:
         total_confidence = 0.0
         for result in metric_results:
             data_points = result.analysis_details.get("data_points", 0)
-            metric_confidence = min(data_points / 20.0, 1.0)  # Full confidence at 20+ points
+            metric_confidence = min(
+                data_points / self.MIN_DATA_POINTS_FOR_FULL_CONFIDENCE, 1.0
+            )
             total_confidence += metric_confidence
         
         return min(total_confidence / len(metric_results), 1.0)

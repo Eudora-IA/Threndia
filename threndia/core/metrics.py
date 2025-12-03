@@ -29,6 +29,10 @@ class MetricResult:
 class MetricAnalyzer:
     """Analyzes market metrics for patterns and trends"""
     
+    # Configurable trend thresholds
+    UPWARD_TREND_THRESHOLD = 0.01
+    DOWNWARD_TREND_THRESHOLD = -0.01
+    
     def __init__(self, window_size: int = 20):
         """
         Initialize the MetricAnalyzer
@@ -78,9 +82,9 @@ class MetricAnalyzer:
         # Calculate trend
         if len(values) >= 2:
             trend_slope = (values[-1] - values[0]) / len(values)
-            if trend_slope > 0.01:
+            if trend_slope > self.UPWARD_TREND_THRESHOLD:
                 trend = "upward"
-            elif trend_slope < -0.01:
+            elif trend_slope < self.DOWNWARD_TREND_THRESHOLD:
                 trend = "downward"
             else:
                 trend = "stable"
@@ -150,5 +154,15 @@ class MetricAnalyzer:
         values1 = np.array([point.value for point in data1[-min_length:]])
         values2 = np.array([point.value for point in data2[-min_length:]])
         
-        correlation = float(np.corrcoef(values1, values2)[0, 1])
+        # Check for zero variance (constant values)
+        if np.std(values1) == 0 or np.std(values2) == 0:
+            return None
+        
+        correlation_matrix = np.corrcoef(values1, values2)
+        correlation = float(correlation_matrix[0, 1])
+        
+        # Check for NaN values
+        if np.isnan(correlation):
+            return None
+        
         return correlation
