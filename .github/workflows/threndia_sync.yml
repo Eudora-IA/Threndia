@@ -1,0 +1,58 @@
+name: Threndia Sync
+
+on:
+  push:
+    branches:
+      - threndia-pairing
+  schedule:
+    - cron: '0 */12 * * *'  # Every 12 hours
+  workflow_dispatch:
+
+jobs:
+  sync-to-threndia:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "Fazenda Bot"
+          git config --global user.email "bot@fazenda.local"
+
+      - name: Add Threndia Remote
+        env:
+          THRENDIA_TOKEN: ${{ secrets.THRENDIA_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$THRENDIA_TOKEN" ]; then
+            echo "::warning::THRENDIA_ACCESS_TOKEN not configured"
+            exit 0
+          fi
+          git remote add threndia https://oauth2:$THRENDIA_TOKEN@github.com/Eudora-IA/Threndia.git || true
+
+      - name: Push to Threndia
+        env:
+          THRENDIA_TOKEN: ${{ secrets.THRENDIA_ACCESS_TOKEN }}
+        run: |
+          if [ -n "$THRENDIA_TOKEN" ]; then
+            git push threndia threndia-pairing:main --force
+          fi
+
+  quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install ruff pytest pydantic chromadb
+
+      - name: Lint
+        run: ruff check src/market_analysis src/scrapers src/database

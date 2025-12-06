@@ -1,0 +1,66 @@
+---
+job: extension
+config:
+  # Folder name for this training run
+  name: "dummy_flux_lora_v1"
+  process:
+    - type: 'sd_trainer'
+      # Output directory relative to where run.py is executed
+      training_folder: "../../../output"
+      device: cuda:0
+      # Trigger word for the concept
+      trigger_word: "dummy_concept"
+      network:
+        type: "lora"
+        linear: 16
+        linear_alpha: 16
+      save:
+        dtype: float16
+        save_every: 250
+        max_step_saves_to_keep: 1
+        push_to_hub: false
+      datasets:
+        # PATH TO IMAGES: Update this to your local dataset path
+        # Format: "C:\\Users\\Dante\\Desktop\\...\\dataset"
+        - folder_path: "../../../data/datasets/dummy"
+          caption_ext: "txt"
+          caption_dropout_rate: 0.05
+          shuffle_tokens: false
+          cache_latents_to_disk: true
+          # Flux resolutions
+          resolution: [ 512, 768, 1024 ]
+      train:
+        batch_size: 1
+        steps: 500  # Low steps for dummy run
+        gradient_accumulation_steps: 1
+        train_unet: true
+        train_text_encoder: false # Flux usually doesn't need text encoder training
+        gradient_checkpointing: true # Save VRAM
+        noise_scheduler: "flowmatch"
+        optimizer: "adamw8bit"
+        lr: 1e-4
+        ema_config:
+          use_ema: true
+          ema_decay: 0.99
+        dtype: bf16 # RTX 4090 supports bfloat16
+      model:
+        # HuggingFace model path
+        name_or_path: "black-forest-labs/FLUX.1-dev"
+        is_flux: true
+        quantize: true # 8-bit quantization for VRAM efficiency
+      sample:
+        sampler: "flowmatch"
+        sample_every: 100
+        width: 1024
+        height: 1024
+        prompts:
+          - "dummy_concept style, a cyberpunk city street at night"
+          - "dummy_concept style, a cat sitting on a neon sign"
+        neg: ""
+        seed: 42
+        walk_seed: true
+        guidance_scale: 4
+        sample_steps: 20
+meta:
+  name: "[name]"
+  version: '1.0'

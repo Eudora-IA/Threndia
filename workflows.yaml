@@ -1,0 +1,40 @@
+version: "1.0"
+project: Threndia Pairing
+description: "Market Analysis and Web Scraping workflows for Threndia cooperation."
+
+workflows:
+  signal_collection:
+    name: "Signal Collection"
+    description: "Collect market signals from various sources."
+    type: "pipeline"
+    trigger:
+      type: "scheduled"
+      cron: "0 */6 * * *"  # Every 6 hours
+    steps:
+      - name: "scrape_sources"
+        script: "python -m src.scrapers.run_all"
+      - name: "process_signals"
+        script: "python -m src.market_analysis.process"
+      - name: "store_to_chroma"
+        script: "python -m src.database.sync"
+
+  threndia_sync:
+    name: "Threndia Sync"
+    description: "Synchronize data with Threndia repository."
+    type: "maintenance"
+    trigger:
+      type: "manual"
+    activator:
+      script: "python scripts/sync_threndia.py --push"
+    related_repos:
+      - "Eudora-IA/Threndia"
+
+  data_export:
+    name: "Data Export"
+    description: "Export signals to JSON for external consumption."
+    type: "utility"
+    trigger:
+      type: "manual"
+    activator:
+      script: "python scripts/export_signals.py"
+    output_format: "json"

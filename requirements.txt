@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 numpy>=1.24.0
 pandas>=2.0.0
 fastapi>=0.104.0
@@ -7,3 +8,53 @@ asyncio>=3.4.3
 aiohttp>=3.9.0
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
+=======
+# Core
+django>=4.2
+celery[redis]>=5.3
+redis>=5.0
+httpx>=0.25
+
+# RAG & Vectors
+chromadb>=0.4
+faiss-cpu>=1.7
+sentence-transformers>=2.2
+langchain>=0.1
+langgraph>=0.0.35
+mem0ai>=0.0.8
+
+# Integrations
+firecrawl-py>=0.1
+pyanime4k>=2.5
+
+# Image Processing
+Pillow>=10.0
+imageio>=2.31
+moviepy>=1.0
+pygifsicle>=1.0
+
+# AI/ML
+transformers>=4.35
+google-generativeai>=0.3
+gradio>=4.0
+torch>=2.0
+
+# Marketplaces
+paramiko>=3.0
+solana>=0.30
+
+# Telemetry
+prometheus-client>=0.17
+
+# Development
+pytest>=7.0
+black>=23.0
+ruff>=0.1
+
+# Browser Automation
+playwright>=1.40
+
+# CLIP for image embeddings
+transformers>=4.35
+open-clip-torch>=2.20
+>>>>>>> pairduo

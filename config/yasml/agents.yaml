@@ -1,0 +1,171 @@
+# Asset Generator Farm Configuration
+# YASML Agent Definitions
+
+version: "1.0"
+name: "asset-generator-farm"
+
+# ============================================================================
+# AGENT DEFINITIONS
+# ============================================================================
+
+agents:
+  # Primary generation agent
+  generator:
+    name: "Asset Generator"
+    description: "Generates visual assets using ComfyUI and Flux2.dev"
+    llm:
+      provider: "local" # or "gemini"
+      model: "gemma3:27b"
+      temperature: 0.7
+      max_tokens: 4096
+      enable_thinking: true
+    tools:
+      - generate_image
+      - upscale_image
+      - denoise_image
+      - search_knowledge
+    memory:
+      enabled: true
+      user_id: "default"
+
+  # Research agent for content gathering
+  researcher:
+    name: "Content Researcher"
+    description: "Scrapes and analyzes reference content"
+    llm:
+      provider: "local"
+      model: "gemma3:27b"
+      temperature: 0.3
+    tools:
+      - scrape_url
+      - search_knowledge
+      - add_to_knowledge
+      - analyze_trends
+
+  # Market analyst for NFT/stock insights
+  analyst:
+    name: "Market Analyst"
+    description: "Analyzes market trends for asset optimization"
+    llm:
+      provider: "gemini"
+      model: "gemini-1.5-flash"
+      temperature: 0.5
+    tools:
+      - get_market_data
+      - analyze_trends
+      - search_images
+
+# ============================================================================
+# TOOLS CONFIGURATION
+# ============================================================================
+
+tools:
+  generate_image:
+    type: "comfyui"
+    api_url: "http://localhost:8188"
+    default_workflow: "flux2_dev_basic"
+
+  upscale_image:
+    type: "anime4k"
+    scale: 2.0
+    gpu_enabled: true
+
+  denoise_image:
+    type: "nvidia_optix"
+    denoiser_path: "tools/Denoiser.exe"
+
+  scrape_url:
+    type: "firecrawl"
+    api_key: "${FIRECRAWL_API_KEY}"
+
+  search_knowledge:
+    type: "chroma"
+    collection: "knowledge"
+
+  add_to_knowledge:
+    type: "chroma"
+    collection: "knowledge"
+
+  search_images:
+    type: "chroma"
+    collection: "images"
+    use_clip: true
+
+# ============================================================================
+# WORKFLOWS
+# ============================================================================
+
+workflows:
+  asset_generation:
+    description: "Full asset generation pipeline"
+    steps:
+      - agent: researcher
+        action: gather_references
+      - agent: generator
+        action: create_images
+      - agent: generator
+        action: upscale_and_denoise
+      - agent: analyst
+        action: optimize_for_market
+
+  batch_creation:
+    description: "Batch asset creation for marketplaces"
+    parallel: true
+    steps:
+      - agent: generator
+        action: create_variations
+      - agent: generator
+        action: process_all
+
+# ============================================================================
+# STORAGE
+# ============================================================================
+
+storage:
+  vector_db:
+    type: "chromadb"
+    persist_directory: "./data/chroma"
+
+  memory:
+    type: "mem0"
+
+  cache:
+    type: "redis"
+    url: "redis://localhost:6379"
+
+  output:
+    directory: "./output"
+    formats:
+      - png
+      - gif
+      - webp
+
+# ============================================================================
+# TELEMETRY
+# ============================================================================
+
+telemetry:
+  prometheus:
+    enabled: true
+    port: 8000
+
+  logging:
+    level: "INFO"
+    format: "json"
+    file: "./logs/assetfarm.log"
+
+  error_tracking:
+    enabled: true
+    max_errors: 1000
+
+# ============================================================================
+# API KEYS (use environment variables)
+# ============================================================================
+
+credentials:
+  firecrawl_api_key: "${FIRECRAWL_API_KEY}"
+  civitai_api_key: "${CIVITAI_API_KEY}"
+  shutterstock_api_key: "${SHUTTERSTOCK_API_KEY}"
+  opensea_api_key: "${OPENSEA_API_KEY}"
+  magiceden_api_key: "${MAGICEDEN_API_KEY}"
+  gemini_api_key: "${GEMINI_API_KEY}"

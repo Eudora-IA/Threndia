@@ -1,0 +1,24 @@
+# ============================================================================
+# ADDITIONAL EXTERNAL TOOLS
+# ============================================================================
+
+# AI Training
+ai-toolkit  # From: https://github.com/ostris/ai-toolkit (clone separately)
+
+# Google GenAI
+google-genai>=1.0
+
+# Image Annotation
+labelImg>=1.8
+
+# Object Storage
+minio>=7.2
+
+# AI Browser Automation
+skyvern>=0.1
+
+# Genkit
+genkit>=0.1
+
+# Additional LangGraph tools
+langchain-mcp>=0.1

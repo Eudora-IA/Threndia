@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -52,3 +53,76 @@ coverage.xml
 *.log
 *.tmp
 /tmp/
+=======
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+*.env
+
+# Logs
+logs/
+*.log
+
+# Database
+*.db
+*.sqlite3
+chroma_data/
+
+# Models (large files)
+models/
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+
+# Output
+output/
+generated/
+exports/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# API keys/secrets
+secrets/
+credentials.json
+
+# User Requested Exclusions
+*.NFT
+.NFT/
+*marker*Thread*
+
+# Private Tools
+Waifu2x-Extension-GUI/
+Waifu2x*/
+*.7z
+*.rar
+
+# External Repositories (Privacy)
+tools/external/
+stable-diffusion-webui/
+ComfyUI/
+>>>>>>> pairduo

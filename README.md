@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Threndia
 
 **Thread Analysis API for Market Analysis and Agent Self-Learning**
@@ -14,11 +15,29 @@ Threndia is a powerful Python framework for market analysis and agent creation, 
 - ⚡ **Asynchronous Operations**: High-performance async/await support
 
 ## Installation
+=======
+# Asset Generator Farm
+
+Large-scale multi-content asset generation system with AI/ML pipelines for visual asset creation and distribution.
+
+## 🚀 Features
+
+- **AI Image Generation**: ComfyUI + Flux2.dev integration
+- **Video Upscaling**: Anime4K real-time processing
+- **Model Management**: CivitAI auto-download
+- **Web Scraping**: FireCrawl integration
+- **Asset Distribution**: Adobe Stock, Shutterstock, OpenSea, Magic Eden
+- **RAG System**: ChromaDB + FAISS vector stores
+- **Task Orchestration**: Celery + LangGraph pipelines
+
+## 📦 Installation
+>>>>>>> pairduo
 
 ```bash
 pip install -r requirements.txt
 ```
 
+<<<<<<< HEAD
 ## Quick Start
 
 ```python
@@ -143,3 +162,25 @@ threndia/
 ## License
 
 See LICENSE file for details.
+=======
+## 🔧 Configuration
+
+1. Copy `.env.example` to `.env`
+2. Add API keys for services
+3. Configure YASML files in `config/yasml/`
+
+## 📁 Structure
+
+```
+src/
+├── core/           # RAG engine, vector stores, memory
+├── integrations/   # External tool nodes
+├── pipelines/      # LangGraph + Celery workflows
+├── marketplaces/   # Stock platform clients
+└── tools/          # GIF creator, LoRa trainer
+```
+
+## 📖 Documentation
+
+See [AGENTS.MD](AGENTS.MD) for Python coding standards.
+>>>>>>> pairduo

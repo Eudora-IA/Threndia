@@ -1,0 +1,102 @@
+# External Tools Configuration
+# Add to config/yasml/tools.yaml
+
+version: "1.0"
+
+# ============================================================================
+# EXTERNAL TOOL INTEGRATIONS
+# ============================================================================
+
+external_tools:
+
+  # AI-Toolkit (LoRA Training) - ostris/ai-toolkit
+  ai_toolkit:
+    enabled: true
+    path: "./tools/external/ai-toolkit"
+    description: "Finetuning diffusion models (LoRA, FLUX, SDXL)"
+    commands:
+      train: "python run.py config/train_config.yaml"
+      ui: "python run.py --ui"
+    gpu_required: true
+    min_vram: 12  # GB
+
+  # LabelImg (Image Annotation) - HumanSignal/labelImg
+  labelimg:
+    enabled: true
+    command: "labelImg"
+    description: "Image annotation tool for datasets"
+    formats:
+      - YOLO
+      - PascalVOC
+      - CreateML
+
+  # MinIO (Object Storage) - minio/minio
+  minio:
+    enabled: true
+    path: "./tools/external/minio/minio.exe"
+    endpoint: "http://localhost:9000"
+    access_key: "${MINIO_ACCESS_KEY}"
+    secret_key: "${MINIO_SECRET_KEY}"
+    buckets:
+      - assets
+      - models
+      - datasets
+
+  # Skyvern (AI Browser Automation) - Skyvern-AI/skyvern
+  skyvern:
+    enabled: true
+    api_url: "http://localhost:8080"
+    description: "AI-powered browser automation"
+    use_cases:
+      - form_filling
+      - data_extraction
+      - file_downloading
+      - authentication
+
+  # Blend_My_NFTs (Blender NFT Generator) - torrinworx/Blend_My_NFTs
+  blend_my_nfts:
+    enabled: true
+    path: "./tools/external/blend-my-nfts"
+    description: "Blender addon for NFT collection generation"
+    blender_version: "3.0+"
+
+  # MCP-Chrome (Chrome MCP) - hangwin/mcp-chrome
+  mcp_chrome:
+    enabled: true
+    path: "./tools/external/mcp-chrome"
+    description: "Chrome browser MCP integration"
+
+  # LangGraph-MCP - esxr/langgraph-mcp
+  langgraph_mcp:
+    enabled: true
+    path: "./tools/external/langgraph-mcp"
+    description: "Universal assistant with LangGraph + MCP"
+
+  # SurfSense - MODSetter/SurfSense
+  surfsense:
+    enabled: true
+    path: "./tools/external/surfsense"
+    description: "Web browsing AI assistant"
+
+  # ChromaDB Chatbot - daveshap/ChromaDB_Chatbot_Public
+  chromadb_chatbot:
+    enabled: true
+    path: "./tools/external/chromadb-chatbot"
+    description: "RAG chatbot with ChromaDB"
+
+  # Genkit - gemini-cli-extensions/genkit
+  genkit:
+    enabled: true
+    description: "Firebase Genkit for AI workflows"
+
+  # GitHub Copilot CLI - github/copilot-cli
+  copilot_cli:
+    enabled: true
+    command: "github-copilot-cli"
+    description: "AI-powered CLI assistance"
+
+  # Google Python GenAI - googleapis/python-genai
+  python_genai:
+    enabled: true
+    api_key: "${GEMINI_API_KEY}"
+    description: "Google GenAI Python SDK"

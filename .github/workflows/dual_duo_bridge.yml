@@ -1,0 +1,36 @@
+name: Dual Duo Bridge Sync
+
+on:
+    push:
+        branches:
+            - pairduo
+
+jobs:
+    bridge-sync:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Source (Fazenda)
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Configure Git
+              run: |
+                  git config --global user.name "Bridge Bot"
+                  git config --global user.email "bot@eudora.ia"
+
+            - name: Sync to Threndia
+              env:
+                  THRENDIA_TOKEN: ${{ secrets.THRENDIA_ACCESS_TOKEN }}
+              run: |
+                  # If Token is not present, skip with warning
+                  if [ -z "$THRENDIA_TOKEN" ]; then
+                    echo "::warning::THRENDIA_ACCESS_TOKEN not found. Skipping auto-sync."
+                    exit 0
+                  fi
+
+                  git remote add threndia https://oauth2:$THRENDIA_TOKEN@github.com/Eudora-IA/Threndia.git
+                  git fetch threndia
+
+                  # Push to Threndia pairduo branch
+                  git push threndia pairduo:pairduo
